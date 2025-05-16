@@ -1,0 +1,7 @@
+### Statistics
+GET localhost:3000/monitoring/statistics HTTP/2
+Accept: application/json
+
+### Hello
+GET localhost:3000/monitoring/health HTTP/2
+Accept: application/json
