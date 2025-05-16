@@ -1,5 +1,6 @@
 # Guia de Contribuição
 
+
 Bem-vindo ao guia de contribuição para o projeto **ecs-starter-template**! Agradecemos seu interesse em contribuir para o nosso projeto. Este documento fornece diretrizes para ajudá-lo a contribuir de maneira eficaz.
 
 ## Índice
