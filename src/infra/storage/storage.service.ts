@@ -7,7 +7,7 @@ import {
   PutObjectCommandOutput,
   S3Client
 } from "@aws-sdk/client-s3";
-import {Endpoint, Region} from "../../main/storage.config";
+import {Endpoint, Region} from "../../main/config/storage.config";
 
 export class StorageService {
   private storage: S3Client;
