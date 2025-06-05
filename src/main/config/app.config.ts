@@ -1,4 +1,4 @@
-import 'node:perf_hooks';
+import { performance } from 'node:perf_hooks';
 import { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify';
 import fastifyRoutesStats from '@fastify/routes-stats';
 import cors from '@fastify/cors';
@@ -8,13 +8,12 @@ import fastifySwaggerUi from '@fastify/swagger-ui';
 import fastifyCircuitBreaker from '@fastify/circuit-breaker';
 import fastifyMetrics from 'fastify-metrics';
 import { setRoute } from './route.config';
-import { FastifyOtelInstrumentation } from '@fastify/otel';
+import { FastifyOtelInstrumentation } from '@fastify/otel/';
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
 import fastifyRateLimit from '@fastify/rate-limit';
 import helmet from '@fastify/helmet';
 
 export const setConfig = (app: FastifyInstance) => {
-
   const provider = new NodeTracerProvider();
   provider.register();
 
@@ -23,14 +22,7 @@ export const setConfig = (app: FastifyInstance) => {
 
   app
     .register(helmet, {
-      contentSecurityPolicy: {
-        directives: {
-          defaultSrc: ['\'self\''],
-          scriptSrc: ['\'self\'', '\'unsafe-inline\''],
-          styleSrc: ['\'self\'', '\'unsafe-inline\''],
-          imgSrc: ['\'self\'', 'data:', 'https:'],
-        },
-      },
+      contentSecurityPolicy: false,
       crossOriginEmbedderPolicy: false,
       crossOriginResourcePolicy: { policy: 'cross-origin' },
       dnsPrefetchControl: { allow: true },
@@ -38,14 +30,42 @@ export const setConfig = (app: FastifyInstance) => {
       hidePoweredBy: true,
       hsts: { maxAge: 31536000, includeSubDomains: true },
       ieNoOpen: true,
-      noSniff: true,
+      noSniff: false,
       referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
       xssFilter: true,
     })
     .register(cors, { origin: '*' })
-    .register(fastifyRoutes)
+    .register(fastifyRateLimit, {
+      max: 100,
+      timeWindow: '1 minute',
+    })
+    .register(fastifyOtelInstrumentation.plugin())
     .register(fastifyRoutesStats)
-    .register(fastifySwagger)
+    .register(fastifyMetrics, { endpoint: '/metrics' })
+    .register(fastifyRoutes)
+    .register(fastifyCircuitBreaker, {
+      threshold: 5,
+      timeout: 30000,
+      onCircuitOpen: async (_: FastifyRequest, reply: FastifyReply) => {
+        reply.code(503).send({
+          error: 'Service Unavailable',
+          message: 'Circuit breaker is open - service is temporarily unavailable',
+        });
+      },
+      resetTimeout: 60000,
+    })
+    .register(fastifySwagger, {
+      openapi: {
+        info: {
+          title: 'API Documentation',
+          description: 'API Documentation',
+          version: '1.0.0',
+        },
+        servers: [{
+          url: 'http://localhost:3000',
+        }],
+      },
+    })
     .register(fastifySwaggerUi, {
       routePrefix: '/documentation',
       uiConfig: {
@@ -58,25 +78,7 @@ export const setConfig = (app: FastifyInstance) => {
         return swaggerObject;
       },
       transformSpecificationClone: true,
-    })
-    .register(fastifyCircuitBreaker, {
-      threshold: 5,
-      timeout: 30000,
-      onCircuitOpen: async (_: FastifyRequest, reply: FastifyReply) => {
-        reply.code(503).send({
-          error: 'Service Unavailable',
-          message: 'Circuit breaker is open - service is temporarily unavailable',
-        });
-      },
-      resetTimeout: 60000,
-    })
-    .register(fastifyMetrics, { endpoint: '/metrics' })
-    .register(fastifyRateLimit, {
-      max: 100,
-      timeWindow: '1 minute',
     });
-
-  app.register(fastifyOtelInstrumentation.plugin());
 
   setRoute(app);
 };
