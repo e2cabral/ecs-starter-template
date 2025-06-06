@@ -8,8 +8,11 @@ import {
   S3Client
 } from "@aws-sdk/client-s3";
 import {Endpoint, Region} from "../../main/config/storage.config";
+import { IStorage } from '../interfaces/i-storage.interface';
+import { injectable } from 'inversify';
 
-export class StorageService {
+@injectable()
+export class StorageService implements IStorage {
   private storage: S3Client;
 
   constructor() {
