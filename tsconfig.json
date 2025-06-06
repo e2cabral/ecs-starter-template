@@ -16,7 +16,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "moduleResolution": "node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": [
     "src"
