@@ -5,3 +5,7 @@ Accept: application/json
 ### Hello
 GET localhost:3000/monitoring/health HTTP/2
 Accept: application/json
+
+### Metrics
+GET localhost:3000/metrics HTTP/2
+Accept: application/json
