@@ -1,6 +1,9 @@
 import {createConnection} from 'mysql2/promise'
+import { IDatabase } from '../interfaces/i-database.interface';
+import { injectable } from 'inversify';
 
-export class Database {
+@injectable()
+export class Database implements IDatabase {
   public connection: any;
 
   constructor() {
