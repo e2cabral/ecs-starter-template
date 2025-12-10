@@ -2,6 +2,8 @@
 const Database = Symbol.for('Database');
 const Logger = Symbol.for('Logger');
 const Storage = Symbol.for('Storage');
+const Auth = Symbol.for('Auth');
+const ParameterStorage = Symbol.for('ParameterStorage');
 //#endregion
 
 //#region Controllers Types
@@ -13,6 +15,8 @@ export const TYPES = {
     Database,
     Logger,
     Storage,
+    Auth,
+    ParameterStorage,
   },
   Services: {},
   Repositories: {},
