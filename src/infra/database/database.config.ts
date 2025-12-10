@@ -24,6 +24,6 @@ export class Database implements IDatabase {
   }
 
   async closeConnection() {
-    this.connection.end();
+    await this.connection.end();
   }
 }
