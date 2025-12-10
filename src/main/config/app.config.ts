@@ -1,4 +1,3 @@
-import { performance } from 'node:perf_hooks';
 import { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify';
 import fastifyRoutesStats from '@fastify/routes-stats';
 import cors from '@fastify/cors';
