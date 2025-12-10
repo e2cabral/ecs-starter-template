@@ -1,10 +1,7 @@
 import {
   GetObjectCommand,
-  GetObjectCommandOutput,
   ListBucketsCommand,
-  ListBucketsCommandOutput,
   PutObjectCommand,
-  PutObjectCommandOutput,
   S3Client
 } from "@aws-sdk/client-s3";
 import {Endpoint, Region} from "../../main/config/storage.config";
@@ -16,10 +13,10 @@ export class StorageService implements IStorage {
   private storage: S3Client;
 
   constructor() {
-    this.storage = new S3Client([{
+    this.storage = new S3Client({
       region: Region,
       endpoint: Endpoint
-    }]);
+    });
   }
 
   async get(key: string, bucket: string) {
@@ -28,7 +25,7 @@ export class StorageService implements IStorage {
       Bucket: bucket
     })
 
-    const response = await this.storage.send<GetObjectCommand, GetObjectCommandOutput>(command)
+    const response = await this.storage.send(command)
     return (await response.Body!.transformToString())
   }
 
@@ -39,14 +36,14 @@ export class StorageService implements IStorage {
       Body: data
     })
 
-    const response = await this.storage.send<PutObjectCommand, PutObjectCommandOutput>(command)
-    return (await response.$metadata.httpStatusCode)
+    const response = await this.storage.send(command)
+    return response.$metadata.httpStatusCode;
   }
 
   async listBuckets() {
     const command = new ListBucketsCommand({})
 
-    const response = await this.storage.send<ListBucketsCommand, ListBucketsCommandOutput>(command)
-    return (await response.Buckets)
+    const response = await this.storage.send(command);
+    return response.Buckets
   }
 }
