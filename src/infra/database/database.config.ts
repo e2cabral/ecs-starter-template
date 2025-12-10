@@ -1,22 +1,29 @@
-import {createConnection} from 'mysql2/promise'
+import { Pool } from 'pg';
 import { IDatabase } from '../interfaces/i-database.interface';
 import { injectable } from 'inversify';
 
 @injectable()
 export class Database implements IDatabase {
-  public connection: any;
+  public connection: Pool;
 
-  constructor() {
-  }
-
-  async getConnection(host: string, user: string, password: string, database: string) {
-    this.connection = await createConnection({
+  constructor(host: string, user: string, password: string, database: string) {
+    this.connection = new Pool({
       host,
       user,
       password,
       database,
-      multipleStatements: true,
-      namedPlaceholders: true,
     });
+  }
+
+  async getConnection() {
+    return this.connection;
+  }
+
+  async connect() {
+    return this.connection.connect();
+  }
+
+  async closeConnection() {
+    this.connection.end();
   }
 }

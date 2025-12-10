@@ -1,5 +1,9 @@
-export interface IDatabase {
-  connection: any;
+import { Pool, PoolClient } from 'pg';
 
-  getConnection(host: string, user: string, password: string, database: string): Promise<void>;
+export interface IDatabase {
+  connection: Pool;
+
+  getConnection(): Promise<Pool>;
+  connect(): Promise<PoolClient>;
+  closeConnection(): Promise<void>;
 }
