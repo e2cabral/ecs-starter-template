@@ -33,14 +33,16 @@ export class Logger implements ILogger {
   }
 
   private logFormat() {
-    return winston.format.printf(({ timestamp, level, message, durationMs }) => {
+    return winston.format.printf(({ timestamp, level, message, durationMs, methodName }) => {
       const memoryInfo = this.memoryUsage();
 
       const date = moment(timestamp).format('YYYY-MM-DD HH:mm:ss');
 
       const duration = durationMs ? `(Tempo de execução: ${durationMs}ms)` : '';
 
-      return `${date} > (${memoryInfo}) > [${level.toUpperCase()}]: ${message} | ${duration}`;
+      const method = methodName ? `[${methodName}] ` : '';
+
+      return `${date} > (${memoryInfo}) > [${level.toUpperCase()}]: ${method}${message} | ${duration}`;
     });
   }
 
