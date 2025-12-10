@@ -4,13 +4,6 @@ import fastify from 'fastify';
 const app = fastify({
   disableRequestLogging: true,
   ignoreTrailingSlash: true,
-  logger: {
-    level: 'info',
-    serializers: {
-      req: () => undefined,
-      res: () => undefined
-    }
-  }
 });
 
 setConfig(app)
