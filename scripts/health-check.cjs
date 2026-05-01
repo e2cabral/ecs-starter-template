@@ -68,7 +68,7 @@ const checkTestCoverage = () => {
     } else {
       console.log('  ⚠️  Relatório de cobertura não encontrado');
     }
-  } catch (error) {
+  } catch {
     console.log('  ❌ Erro ao executar testes');
   }
 };
@@ -89,7 +89,7 @@ const checkLint = () => {
   try {
     execSync('npm run lint');
     console.log('  ✅ Código está em conformidade com o estilo definido');
-  } catch (error) {
+  } catch {
     console.log('  ❌ Problemas de lint encontrados');
   }
 };

@@ -5,7 +5,7 @@ import {
   CacheConfig,
   DatabaseConfig,
   PaymentsConfig,
-} from '../parameter-storage.types';
+} from '../parameter-storage.types.js';
 
 export interface IParameterStorageService {
   getDatabaseParameters(): Promise<DatabaseConfig>;

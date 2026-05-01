@@ -1,22 +1,31 @@
-import { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify';
+import {
+  FastifyRequest,
+  FastifyReply,
+  FastifyInstance,
+  FastifyPluginCallback,
+} from 'fastify';
 import fastifyRoutesStats from '@fastify/routes-stats';
 import cors from '@fastify/cors';
 import fastifyRoutes from '@fastify/routes';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import fastifyCircuitBreaker from '@fastify/circuit-breaker';
-import fastifyMetrics from 'fastify-metrics';
-import { setRoute } from './route.config';
-import { FastifyOtelInstrumentation } from '@fastify/otel/';
+import fastifyMetrics from 'fastify-metrics/dist/index.js';
+import { setRoute } from './route.config.js';
+import { FastifyOtelInstrumentation } from '@fastify/otel';
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
 import fastifyRateLimit from '@fastify/rate-limit';
 import helmet from '@fastify/helmet';
+
+const fastifyMetricsPlugin = fastifyMetrics as unknown as FastifyPluginCallback<{
+  endpoint: string;
+}>;
 
 export const setConfig = (app: FastifyInstance) => {
   const provider = new NodeTracerProvider();
   provider.register();
 
-  const fastifyOtelInstrumentation = new FastifyOtelInstrumentation({ servername: 'ecs-starter-template' });
+  const fastifyOtelInstrumentation = new FastifyOtelInstrumentation();
   fastifyOtelInstrumentation.setTracerProvider(provider);
 
   app
@@ -31,7 +40,6 @@ export const setConfig = (app: FastifyInstance) => {
       ieNoOpen: true,
       noSniff: false,
       referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
-      xssFilter: true,
     })
     .register(cors, { origin: '*' })
     .register(fastifyRateLimit, {
@@ -40,7 +48,7 @@ export const setConfig = (app: FastifyInstance) => {
     })
     .register(fastifyOtelInstrumentation.plugin())
     .register(fastifyRoutesStats)
-    .register(fastifyMetrics, { endpoint: '/metrics' })
+    .register(fastifyMetricsPlugin, { endpoint: '/metrics' })
     .register(fastifyRoutes)
     .register(fastifyCircuitBreaker, {
       threshold: 5,

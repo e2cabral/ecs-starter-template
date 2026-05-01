@@ -1,17 +1,17 @@
 import { Container } from 'inversify';
-import { TYPES } from './types.container';
-import { Logger } from '../logging/logger.service';
-import { Database } from '../database/database.config';
-import { ILogger } from '../interfaces/i-logger.interface';
-import { IDatabase } from '../interfaces/i-database.interface';
-import { IStorage } from '../interfaces/i-storage.interface';
-import { StorageService } from '../storage/storage.service';
-import { IMonitoringController } from '../../presentation/controllers/interfaces/i-monitoring.controller';
-import { MonitoringController } from '../../presentation/controllers/monitoring.controller';
-import { IParameterStorageService } from '../storage/interfaces/i-paramenter-storage.service';
-import { ParameterStorageService } from '../storage/parameter-storage.service';
-import { IAuthService } from '../auth/interfaces/i-auth.service';
-import { AuthService } from '../auth/auth.service';
+import { TYPES } from './types.container.js';
+import { Logger } from '../logging/logger.service.js';
+import { Database } from '../database/database.config.js';
+import { ILogger } from '../interfaces/i-logger.interface.js';
+import { IDatabase } from '../interfaces/i-database.interface.js';
+import { IStorage } from '../interfaces/i-storage.interface.js';
+import { StorageService } from '../storage/storage.service.js';
+import { IMonitoringController } from '../../presentation/controllers/interfaces/i-monitoring.controller.js';
+import { MonitoringController } from '../../presentation/controllers/monitoring.controller.js';
+import { IParameterStorageService } from '../storage/interfaces/i-paramenter-storage.service.js';
+import { ParameterStorageService } from '../storage/parameter-storage.service.js';
+import { IAuthService } from '../auth/interfaces/i-auth.service.js';
+import { AuthService } from '../auth/auth.service.js';
 
 const container = new Container()
 

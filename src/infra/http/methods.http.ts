@@ -1,4 +1,4 @@
-import { HTTPStatus } from './protocols.http';
+import { HTTPStatus } from './protocols.http.js';
 
 export const ok = (data: unknown) => {
   return {

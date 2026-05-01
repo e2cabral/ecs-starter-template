@@ -1,7 +1,5 @@
 import {
-  GetObjectCommandOutput,
   ListBucketsCommandOutput,
-  PutObjectCommandOutput,
 } from '@aws-sdk/client-s3';
 
 export interface IStorage {

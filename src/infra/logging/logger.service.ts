@@ -1,6 +1,6 @@
 import winston from "winston";
 import moment from "moment";
-import { ILogger } from '../interfaces/i-logger.interface';
+import { ILogger } from '../interfaces/i-logger.interface.js';
 import { injectable } from 'inversify';
 
 @injectable()
@@ -36,7 +36,7 @@ export class Logger implements ILogger {
     return winston.format.printf(({ timestamp, level, message, durationMs, methodName }) => {
       const memoryInfo = this.memoryUsage();
 
-      const date = moment(timestamp).format('YYYY-MM-DD HH:mm:ss');
+      const date = moment(String(timestamp)).format('YYYY-MM-DD HH:mm:ss');
 
       const duration = durationMs ? `(Tempo de execução: ${durationMs}ms)` : '';
 

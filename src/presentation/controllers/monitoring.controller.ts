@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { injectable } from 'inversify';
-import { IMonitoringController } from './interfaces/i-monitoring.controller';
+import { IMonitoringController } from './interfaces/i-monitoring.controller.js';
 
 @injectable()
 export class MonitoringController implements IMonitoringController{

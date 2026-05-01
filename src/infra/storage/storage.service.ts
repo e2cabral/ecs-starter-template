@@ -4,8 +4,8 @@ import {
   PutObjectCommand,
   S3Client
 } from "@aws-sdk/client-s3";
-import {Endpoint, Region} from "../../main/config/storage.config";
-import { IStorage } from '../interfaces/i-storage.interface';
+import { Endpoint, Region } from '../../main/config/storage.config.js';
+import { IStorage } from '../interfaces/i-storage.interface.js';
 import { injectable } from 'inversify';
 
 @injectable()

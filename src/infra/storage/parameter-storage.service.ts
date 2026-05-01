@@ -10,7 +10,7 @@ import {
   CacheParametersKeys,
   DatabaseParametersKeys,
   PaymentsParametersKeys,
-} from './parameters.keys';
+} from './parameters.keys.js';
 import {
   AIConfig,
   AIFileConfig,
@@ -18,8 +18,8 @@ import {
   CacheConfig,
   DatabaseConfig,
   PaymentsConfig,
-} from './parameter-storage.types';
-import { IParameterStorageService } from './interfaces/i-paramenter-storage.service';
+} from './parameter-storage.types.js';
+import { IParameterStorageService } from './interfaces/i-paramenter-storage.service.js';
 
 @injectable()
 export class ParameterStorageService implements IParameterStorageService {

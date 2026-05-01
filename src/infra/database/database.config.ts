@@ -1,29 +1,54 @@
-import { Pool } from 'pg';
-import { IDatabase } from '../interfaces/i-database.interface';
-import { injectable } from 'inversify';
+import { Pool, PoolClient } from 'pg';
+import { IDatabase } from '../interfaces/i-database.interface.js';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '../container/types.container.js';
+import { IParameterStorageService } from '../storage/interfaces/i-paramenter-storage.service.js';
 
 @injectable()
 export class Database implements IDatabase {
-  public connection: Pool;
+  public connection!: Pool;
+  private connectionPromise?: Promise<Pool>;
 
-  constructor(host: string, user: string, password: string, database: string) {
-    this.connection = new Pool({
-      host,
-      user,
-      password,
-      database,
-    });
+  constructor(
+    @inject(TYPES.Infrastructure.ParameterStorage)
+    private readonly parameterStorage: IParameterStorageService,
+  ) {
   }
 
-  async getConnection() {
-    return this.connection;
+  private async ensureConnection(): Promise<Pool> {
+    if (this.connection) {
+      return this.connection;
+    }
+
+    if (!this.connectionPromise) {
+      this.connectionPromise = this.parameterStorage
+        .getDatabaseParameters()
+        .then(({ host, user, password, name }) => {
+          this.connection = new Pool({
+            host,
+            user,
+            password,
+            database: name,
+          });
+
+          return this.connection;
+        });
+    }
+
+    return this.connectionPromise;
   }
 
-  async connect() {
-    return this.connection.connect();
+  async getConnection(): Promise<Pool> {
+    return this.ensureConnection();
   }
 
-  async closeConnection() {
-    await this.connection.end();
+  async connect(): Promise<PoolClient> {
+    const connection = await this.ensureConnection();
+    return connection.connect();
+  }
+
+  async closeConnection(): Promise<void> {
+    const connection = await this.ensureConnection();
+    await connection.end();
   }
 }

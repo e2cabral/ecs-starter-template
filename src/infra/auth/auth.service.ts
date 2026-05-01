@@ -1,7 +1,7 @@
-import { IAuthService } from './interfaces/i-auth.service';
+import { IAuthService } from './interfaces/i-auth.service.js';
 import { inject, injectable } from 'inversify';
-import { TYPES } from '../container/types.container';
-import { ParameterStorageService } from '../storage/parameter-storage.service';
+import { TYPES } from '../container/types.container.js';
+import { ParameterStorageService } from '../storage/parameter-storage.service.js';
 import * as auth from 'jose';
 
 @injectable()
